@@ -1,0 +1,15 @@
+name: ${project.name}
+author: khmDEV
+main: ${project.groupId}.${project.artifactId}.init
+version: ${project.version}
+commands:
+    mds:
+      permission: mds.command
+      permission-message: No tienes permisos <permission>
+permissions:
+         mds.command:
+                 default: op
+         mds.attack:
+                 default: op
+softdepend: [HUB]
+Depend: [HUB]
