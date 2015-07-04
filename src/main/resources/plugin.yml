@@ -11,5 +11,5 @@ permissions:
                  default: op
          mds.attack:
                  default: op
-softdepend: [HUB]
-Depend: [HUB]
+softdepend: [APIAuxiliar]
+Depend: [APIAuxiliar]

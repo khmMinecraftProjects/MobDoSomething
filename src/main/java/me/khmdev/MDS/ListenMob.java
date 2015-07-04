@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,7 +29,7 @@ public class ListenMob implements Listener, Runnable {
 		pl.getServer().getScheduler().runTaskTimer(pl, this, 0,20000000);
 
 	}
-
+	
 	@EventHandler
 	public void listenMob(PlayerInteractEntityEvent e) {
 		MetadataValue data = API.getMetadata(e.getRightClicked(), "IdMDS");
@@ -36,11 +37,18 @@ public class ListenMob implements Listener, Runnable {
 		if (data != null) {
 			MobDo m = base.getMob(data.asString());
 			if (m != null) {
-				m.initTutorial(e.getPlayer());
+				m.execute(e.getPlayer());
 			}
 		}
 	}
+	@EventHandler
+	public void listenMob(EntityTeleportEvent e) {
+		MetadataValue data = API.getMetadata(e.getEntity(), "IdMDS");
 
+		if (data != null) {
+			e.setCancelled(true);
+		}
+	}
 	@EventHandler
 	public void listenMob(EntityDamageByEntityEvent e) {
 		MetadataValue data = API.getMetadata(e.getEntity(), "IdMDS");

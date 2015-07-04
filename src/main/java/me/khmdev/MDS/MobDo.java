@@ -1,6 +1,9 @@
 package me.khmdev.MDS;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -11,24 +14,23 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.khmdev.APIBase.API;
-import me.khmdev.HUB.Base;
-import me.khmdev.HUB.Tutorial.Tutorial;
-import me.khmdev.HUB.Tutorial.TutorialAction;
 
 public class MobDo {
 	private String id, name;
-	private Tutorial tutorial;
 	private EntityType creature;
 	private boolean freeze, inmortal;
+	private List<String> actions = new LinkedList<>();
+	private HashMap<String, Object> params;
 
-	public MobDo(String i, String n, EntityType c, Tutorial t, boolean f,
-			boolean in) {
+	public MobDo(String i, String n, EntityType c, boolean f, boolean in,
+			HashMap<String, Object> par, List<String> act) {
 		id = i;
 		name = n;
 		creature = c;
-		tutorial = t;
 		freeze = f;
 		inmortal = in;
+		params = par;
+		actions = act;
 	}
 
 	public String getId() {
@@ -37,10 +39,6 @@ public class MobDo {
 
 	public String getName() {
 		return name;
-	}
-
-	public Tutorial getTutorial() {
-		return tutorial;
 	}
 
 	public EntityType getCreature() {
@@ -74,7 +72,7 @@ public class MobDo {
 		Entity mob = location.getWorld().spawnEntity(location, creature);
 		if (mob instanceof LivingEntity) {
 			LivingEntity live = (LivingEntity) mob;
-			
+
 			live.setCustomName(name);
 		}
 		API.setMetadata(mob, "IdMDS", id);
@@ -82,13 +80,28 @@ public class MobDo {
 
 	}
 
-	public void initTutorial(Player player) {
-		if(tutorial.esTuto(player.getName())){
-			player.sendMessage(
-					ChatColor.translateAlternateColorCodes('&',
-							"&CYa has hecho el tutorial"));
-		}else{
-			Base.run(new TutorialAction(tutorial,player));
+	public void execute(Player player) {
+		for (String as : actions) {
+			Action a = base.getAction(as);
+			if (a != null) {
+				a.execute(this, player);
+			}
 		}
+	}
+
+	public void addAction(String a) {
+		actions.add(a);
+	}
+
+	public void removeAction(String a) {
+		actions.remove(a);
+	}
+
+	public List<String> getActions() {
+		return actions;
+	}
+
+	public HashMap<String, Object> getParams() {
+		return params;
 	}
 }

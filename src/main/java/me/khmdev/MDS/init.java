@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class init extends JavaPlugin{
 	public static base base;
 	public void onEnable() {
-		if (!hasPluging("HUB")) {
+		if (!hasPluging("APIAuxiliar")) {
 			getLogger().severe(
 					getName()
 							+ " se desactivo debido ha que no encontro la API");
@@ -38,6 +38,6 @@ public class init extends JavaPlugin{
 	}
 	@Override
 	public void onDisable(){
-		base.onDisable();
+		if(base!=null){base.onDisable();}
 	}
 }
